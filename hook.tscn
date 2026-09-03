@@ -27,13 +27,28 @@ func _integrate_forces(state: PhysicsDirectBodyState3D) -> void:
 "
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ldsl7"]
-radius = 0.10055199
+radius = 0.19964258
 
 [sub_resource type="SphereMesh" id="SphereMesh_1mm2r"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1mm2r"]
+render_priority = 1
+transparency = 1
+no_depth_test = true
+shading_mode = 0
+albedo_color = Color(1, 0.5833334, 0, 1)
+stencil_mode = 3
+stencil_flags = 1
+stencil_compare = 5
+metadata/_stencil_owned = true
+
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ldsl7"]
+next_pass = SubResource("StandardMaterial3D_1mm2r")
 emission_enabled = true
-emission = Color(0.76, 0.6206667, 0, 1)
+emission = Color(1, 0.94509804, 0.7019608, 1)
+stencil_mode = 2
+stencil_flags = 2
+stencil_color = Color(1, 0.5833334, 0, 1)
 
 [node name="Hook" type="RigidBody3D" unique_id=2126826750]
 collision_layer = 4
@@ -46,9 +61,21 @@ script = SubResource("GDScript_ldsl7")
 shape = SubResource("SphereShape3D_ldsl7")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1629140850]
-transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+transform = Transform3D(0.4, 0, 0, 0, 0.4, 0, 0, 0, 0.4, 0, 0, 0)
 mesh = SubResource("SphereMesh_1mm2r")
 surface_material_override/0 = SubResource("StandardMaterial3D_ldsl7")
 
 [node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=1133613486]
+light_color = Color(1, 0.945, 0.7, 1)
+light_energy = 1.5
+light_volumetric_fog_energy = 0.1
 omni_range = 50.0
+
+[node name="VoxelViewer" type="VoxelViewer" parent="OmniLight3D" unique_id=663267427]
+view_distance = 65
+
+[node name="FogGlow" type="OmniLight3D" parent="." unique_id=942314801]
+light_color = Color(1, 0.7607843, 0, 1)
+light_volumetric_fog_energy = 16.0
+omni_range = 2.0
+omni_attenuation = 2.0

@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://bs72ogkvdd7d6" path="res://addons/proto_controller/proto_controller.tscn" id="2_e2o6t"]
 [ext_resource type="PackedScene" uid="uid://c2gsnlt3cs3km" path="res://hook.tscn" id="2_fc0e3"]
 [ext_resource type="Texture2D" uid="uid://cgmwhseciaffm" path="res://icon.svg" id="3_feb5d"]
+[ext_resource type="PackedScene" uid="uid://jctbq67dyh5n" path="res://piercing_flame.tscn" id="5_7jktm"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_80nbo"]
 sky_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
@@ -13,227 +14,184 @@ ground_horizon_color = Color(0.66224277, 0.6717428, 0.6867428, 1)
 sky_material = SubResource("ProceduralSkyMaterial_80nbo")
 
 [sub_resource type="Environment" id="Environment_feb5d"]
-background_mode = 2
+background_energy_multiplier = 0.0
 sky = SubResource("Sky_e2o6t")
-ambient_light_sky_contribution = 0.3
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
+ambient_light_sky_contribution = 0.1
+ambient_light_energy = 0.0
 tonemap_mode = 2
-
-[sub_resource type="TorusMesh" id="TorusMesh_80nbo"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fc0e3"]
-render_priority = 1
-transparency = 1
-shading_mode = 0
-albedo_color = Color(0.80784315, 0, 0, 1)
-grow = true
-grow_amount = 0.01
-stencil_mode = 3
-stencil_flags = 1
-stencil_compare = 5
-metadata/_stencil_owned = true
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_e2o6t"]
-next_pass = SubResource("StandardMaterial3D_fc0e3")
-emission = Color(0.7647059, 0, 0, 1)
-emission_energy_multiplier = 18.42
-subsurf_scatter_enabled = true
-subsurf_scatter_strength = 1.0
-subsurf_scatter_transmittance_color = Color(1, 0.19607843, 1, 1)
-grow_amount = 0.01
-stencil_mode = 1
-stencil_flags = 2
-stencil_color = Color(0.80784315, 0, 0, 1)
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_feb5d"]
-grow_amount = 0.33
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7jktm"]
-render_priority = 1
-transparency = 1
-no_depth_test = true
-shading_mode = 0
-albedo_color = Color(0, 0.36862746, 0, 1)
-stencil_mode = 3
-stencil_flags = 1
-stencil_compare = 5
-metadata/_stencil_owned = true
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ryrav"]
-next_pass = SubResource("StandardMaterial3D_7jktm")
-stencil_mode = 2
-stencil_flags = 2
-stencil_color = Color(0, 0.36862746, 0, 1)
+glow_intensity = 8.0
+fog_mode = 1
+fog_light_color = Color(0, 0, 0, 1)
+fog_density = 1.0
+fog_depth_curve = 3.8637245
+fog_depth_end = 110.0
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.003
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eow3j"]
 albedo_texture = ExtResource("3_feb5d")
 uv1_triplanar = true
 
 [sub_resource type="FastNoiseLite" id="FastNoiseLite_feb5d"]
-frequency = 0.012
+frequency = 0.014
 fractal_octaves = 2
 metadata/_preview_in_3d_space_ = true
 
 [sub_resource type="VoxelGeneratorNoise" id="VoxelGeneratorNoise_fc0e3"]
 noise = SubResource("FastNoiseLite_feb5d")
-height_start = -700.0
-height_range = 1000.0
+height_start = -350.0
+height_range = 500.0
+
+[sub_resource type="VoxelMesherTransvoxel" id="VoxelMesherTransvoxel_fc0e3"]
+mesh_optimization_enabled = true
+mesh_optimization_error_threshold = 0.03
 
 [sub_resource type="VoxelMesherTransvoxel" id="VoxelMesherTransvoxel_7jktm"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j5wjh"]
-render_priority = 1
-transparency = 1
-no_depth_test = true
-shading_mode = 0
-albedo_color = Color(0.79, 0.35550004, 0, 1)
-stencil_mode = 3
-stencil_flags = 1
-stencil_compare = 5
-metadata/_stencil_owned = true
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vef74"]
-next_pass = SubResource("StandardMaterial3D_j5wjh")
-emission_enabled = true
-emission = Color(0.7631684, 0.25440016, 0, 1)
-stencil_mode = 2
-stencil_flags = 2
-stencil_color = Color(0.79, 0.35550004, 0, 1)
+mesh_optimization_enabled = true
+mesh_optimization_error_threshold = 0.02
 
 [node name="Game" type="Node3D" unique_id=272282667]
+
+[node name="GenManager" type="Node" parent="." unique_id=1886316961]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2124938892]
 environment = SubResource("Environment_feb5d")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1702415521]
 transform = Transform3D(-0.8660254, -0.43301278, 0.25, 0, 0.49999997, 0.86602545, -0.50000006, 0.75, -0.43301266, 0, 0, 0)
+visible = false
 light_energy = 0.5
 shadow_enabled = true
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=564048483]
-transform = Transform3D(-0.91875166, 0.45216233, 0.4034483, 0.38086754, -0.35822392, 0.68176115, 0.9956378, 0.5542786, 0.11149446, -3.774432, 1.6832731, 0.6067822)
-mesh = SubResource("TorusMesh_80nbo")
-surface_material_override/0 = SubResource("StandardMaterial3D_e2o6t")
-
-[node name="CSGCombiner3D" type="CSGCombiner3D" parent="." unique_id=1762459388]
+[node name="Home" type="CSGCombiner3D" parent="." unique_id=1762459388]
 use_collision = true
 
-[node name="CSGBox3D" type="CSGBox3D" parent="CSGCombiner3D" unique_id=556478129]
+[node name="CSGBox3D" type="CSGBox3D" parent="Home" unique_id=556478129]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.5, 0.375)
 use_collision = true
 size = Vector3(15.75, 1, 21)
 
-[node name="CSGBox3D5" type="CSGBox3D" parent="CSGCombiner3D" unique_id=1455132077]
-transform = Transform3D(1, 0, 0, 0, 1.2, 0, 0, 0, 0.099999964, -0.75, 15.5, -10)
+[node name="CSGBox3D5" type="CSGBox3D" parent="Home" unique_id=1455132077]
+transform = Transform3D(1, 0, 0, 0, 1.2, 0, 0, 0, 0.099999964, -2.5, 14.3, 11.024992)
 use_collision = true
-size = Vector3(15.75, 9, 21.75)
+size = Vector3(12.25, 7, 21.75)
 
-[node name="CSGBox3D4" type="CSGBox3D" parent="CSGCombiner3D" unique_id=1440435150]
-transform = Transform3D(0.8660254, -0.5, 0, 0.5, 0.8660254, 0, 0, 0, 1, 12.75, 3.25, 8.875)
+[node name="CSGBox3D4" type="CSGBox3D" parent="Home" unique_id=1440435150]
+transform = Transform3D(0.8660254, -0.5, 0, 0.5, 0.8660254, 0, 0, 0, 1, 15.38814, 9.680608, 7.75)
 use_collision = true
-size = Vector3(15.75, 1, 9)
+size = Vector3(15.75, 1, 11.25)
 
-[node name="CSGBox3D2" type="CSGBox3D" parent="CSGCombiner3D" unique_id=1470793971]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.75, -6.5)
-use_collision = true
-size = Vector3(6.75, 6.5, 1)
-material = SubResource("StandardMaterial3D_feb5d")
-
-[node name="CSGTorus3D2" type="CSGTorus3D" parent="CSGCombiner3D/CSGBox3D2" unique_id=1374185012]
-transform = Transform3D(2.6, 0, 0, 0, 0.7728713, -2.4824724, 0, 2.4824724, 0.7728713, -1, 0.25, 0.8129673)
-operation = 2
-outer_radius = 0.75
-sides = 16
-
-[node name="CSGSphere3D" type="CSGSphere3D" parent="CSGCombiner3D/CSGBox3D2" unique_id=1615944469]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -0.75, 0)
-operation = 2
-radius = 1.0
-
-[node name="CSGTorus3D" type="CSGTorus3D" parent="CSGCombiner3D/CSGBox3D2/CSGSphere3D" unique_id=1430896086]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.75)
-operation = 2
-outer_radius = 0.75
-
-[node name="CSGBox3D3" type="CSGBox3D" parent="CSGCombiner3D" unique_id=1816701449]
-transform = Transform3D(1, 0, 0, 0, 0.25, 0, 0, 0, 2.4, 0, 1.25, 5.5)
-size = Vector3(6.75, 6.5, 1)
-
-[node name="CSGTorus3D2" type="CSGTorus3D" parent="CSGCombiner3D/CSGBox3D3" unique_id=1577012366]
-transform = Transform3D(2.6, 0, 0, 0, 0.7728713, -2.4824724, 0, 2.4824724, 0.7728713, -1, 0.25, 0.8129673)
-operation = 2
-outer_radius = 0.75
-sides = 16
-
-[node name="CSGSphere3D" type="CSGSphere3D" parent="CSGCombiner3D/CSGBox3D3" unique_id=1065442321]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -0.75, 0)
-operation = 2
-radius = 1.0
-
-[node name="CSGTorus3D" type="CSGTorus3D" parent="CSGCombiner3D/CSGBox3D3/CSGSphere3D" unique_id=576605702]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.75)
-operation = 2
-outer_radius = 0.75
-sides = 14
-material = SubResource("StandardMaterial3D_ryrav")
-
-[node name="SoccerBall" parent="CSGCombiner3D" unique_id=1707658285 instance=ExtResource("1_e2o6t")]
+[node name="SoccerBall" parent="Home" unique_id=1707658285 instance=ExtResource("1_e2o6t")]
 transform = Transform3D(1, 0, 0, 0, 0.9659258, 0.25881904, 0, -0.25881904, 0.9659258, 8.25, 6, 7.75)
 
 [node name="Player" parent="." unique_id=592431773 node_paths=PackedStringArray("voxel_terrain") instance=ExtResource("2_e2o6t")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 11.5, 2)
 voxel_terrain = NodePath("../VoxelTerrain")
 can_freefly = true
+base_speed = 5.0
+freefly_speed = 50.0
 player_reel_speed = 5.0
 hook_attach_threshold = -0.5
 min_reel_dist = 2.0
+placement_min_dist = 1.0
 
-[node name="VoxelViewer" type="VoxelViewer" parent="Player" unique_id=774183416]
+[node name="OmniLight3D2" type="OmniLight3D" parent="Player" unique_id=265657625]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
+light_energy = 0.2
+light_volumetric_fog_energy = 0.0
+omni_range = 60.0
+omni_attenuation = 0.7
+
+[node name="VoxelViewer" type="VoxelViewer" parent="Player/OmniLight3D2" unique_id=774183416]
+view_distance = 78
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.6999998, 0)
 
 [node name="VoxelTerrain" type="VoxelTerrain" parent="." unique_id=1590012963]
 collision_mask = 6
 material_override = SubResource("StandardMaterial3D_eow3j")
 generator = SubResource("VoxelGeneratorNoise_fc0e3")
-mesher = SubResource("VoxelMesherTransvoxel_7jktm")
+mesher = SubResource("VoxelMesherTransvoxel_fc0e3")
 transform = Transform3D(1, 0, 0, 0, 1, -1.7484555e-07, 0, 1.7484555e-07, 1, 0, 0, 0)
 
 [node name="VoxelTerrain2" type="VoxelTerrain" parent="." unique_id=161319746]
-generate_collisions = false
 collision_mask = 6
 material_override = SubResource("StandardMaterial3D_eow3j")
 generator = SubResource("VoxelGeneratorNoise_fc0e3")
 mesher = SubResource("VoxelMesherTransvoxel_7jktm")
-transform = Transform3D(1, 0, 0, 0, -1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 0, 0)
-visible = false
+transform = Transform3D(1, 0, 0, 0, -1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 70, 0)
 
 [node name="Hook" parent="." unique_id=2126826750 instance=ExtResource("2_fc0e3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.25, 13, 6.5)
 
-[node name="OuterBox" type="CSGBox3D" parent="." unique_id=1463341124]
-visible = false
-flip_faces = true
-size = Vector3(2000, 2000, 2000)
-
-[node name="CSGTorus3D" type="CSGTorus3D" parent="." unique_id=1657690357]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 1000)
-outer_radius = 5.0
-material = SubResource("StandardMaterial3D_vef74")
-
-[node name="OmniLight3D2" type="OmniLight3D" parent="." unique_id=781384648]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 23.5, 103.75)
-light_color = Color(0.98, 0.43218, 0.21560003, 1)
-light_energy = 15.0
-omni_range = 60.0
-
-[node name="CSGBox3D" type="CSGBox3D" parent="." unique_id=512349827]
+[node name="Collectible Rect" type="CSGBox3D" parent="." unique_id=512349827]
 transform = Transform3D(1.0606601, 1.0606601, 0, -1.0606601, 1.0606601, 0, 0, 0, 1.5, 22.25, -19, 110.5)
 size = Vector3(16.5, 1, 1)
 
-[node name="CSGBox3D2" type="CSGBox3D" parent="." unique_id=184308838]
+[node name="Collectible Rect2" type="CSGBox3D" parent="." unique_id=184308838]
 transform = Transform3D(0.68301266, -0.70710677, -0.18301271, 0.68301266, 0.70710677, -0.18301271, 0.25881904, 0, 0.9659258, 16.19579, 44.87777, 99.95862)
 size = Vector3(16.5, 1, 1)
 
-[node name="CSGBox3D3" type="CSGBox3D" parent="." unique_id=1769922303]
+[node name="Collectible Rect3" type="CSGBox3D" parent="." unique_id=1769922303]
 transform = Transform3D(-9.57572e-08, 0, -2.1906695, 1.0953348, 1.8971754, -4.78786e-08, 1.8971754, -1.0953348, -8.292817e-08, -41.918358, -1.8107729, 98.164185)
 size = Vector3(16.5, 1, 1)
+
+[node name="PiercingFlame" parent="." unique_id=1878161707 instance=ExtResource("5_7jktm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 100, 1000)
+
+[node name="PiercingFlame2" parent="." unique_id=1758800292 instance=ExtResource("5_7jktm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 337.5, 50, 633.5)
+
+[node name="PiercingFlame3" parent="." unique_id=1551214628 instance=ExtResource("5_7jktm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -355.25, 50, 466)
+
+[node name="PiercingFlame4" parent="." unique_id=2036804681 instance=ExtResource("5_7jktm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -913, 50, -72.5)
+
+[node name="PiercingFlame5" parent="." unique_id=735213633 instance=ExtResource("5_7jktm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -421, 50, -917.75)
+
+[node name="PiercingFlame6" parent="." unique_id=1607065957 instance=ExtResource("5_7jktm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -175.5, 50, -582.75)
+
+[node name="PiercingFlame7" parent="." unique_id=581038399 instance=ExtResource("5_7jktm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 238, 50, -1003.25)
+
+[node name="PiercingFlame8" parent="." unique_id=1438688026 instance=ExtResource("5_7jktm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 388, 50, -345.25)
+
+[node name="PiercingFlame9" parent="." unique_id=1181905060 instance=ExtResource("5_7jktm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 465.75, 50, -115.25)
+
+[node name="PiercingFlame10" parent="." unique_id=267663056 instance=ExtResource("5_7jktm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 534, 50, 269)
+
+[node name="PiercingFlame11" parent="." unique_id=1933694859 instance=ExtResource("5_7jktm")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -886.88885, -50, 408.3333)
+
+[node name="PiercingFlame12" parent="." unique_id=371884631 instance=ExtResource("5_7jktm")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -719.3888, -50, -284.4167)
+
+[node name="PiercingFlame13" parent="." unique_id=1833631480 instance=ExtResource("5_7jktm")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -180.88884, -50, -842.1667)
+
+[node name="PiercingFlame14" parent="." unique_id=1301901536 instance=ExtResource("5_7jktm")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 664.3612, -50, -350.16663)
+
+[node name="PiercingFlame15" parent="." unique_id=1869637024 instance=ExtResource("5_7jktm")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -414.63885, -50, 71.58339)
+
+[node name="PiercingFlame16" parent="." unique_id=351874637 instance=ExtResource("5_7jktm")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 749.86115, -50, 308.83344)
+
+[node name="PiercingFlame17" parent="." unique_id=181750539 instance=ExtResource("5_7jktm")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 91.8611, -50, 458.83334)
+
+[node name="PiercingFlame19" parent="." unique_id=1388685573 instance=ExtResource("5_7jktm")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -536.6389, -50, 856.33325)
+
+[node name="PiercingFlame18" parent="." unique_id=1145808062 instance=ExtResource("5_7jktm")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -11.138901, 10.5, -13.166626)
 
 [connection signal="hookCollided" from="Hook" to="Player" method="_on_hook_collided"]

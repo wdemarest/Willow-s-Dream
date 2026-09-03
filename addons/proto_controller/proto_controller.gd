@@ -5,11 +5,12 @@
 
 extends CharacterBody3D
 
-@export
-var voxel_terrain : VoxelTerrain;
 
-@onready
-var voxel_tool : VoxelTool = voxel_terrain.get_voxel_tool()
+var emberPrefab = preload("res://ember.tscn")
+
+@export var voxel_terrain : VoxelTerrain;
+
+@onready var voxel_tool : VoxelTool = voxel_terrain.get_voxel_tool()
 
 
 
@@ -35,15 +36,21 @@ var voxel_tool : VoxelTool = voxel_terrain.get_voxel_tool()
 @export var sprint_speed : float = 10.0
 ## How fast do we freefly?
 @export var freefly_speed : float = 25.0
+
+## when you're heading downward at least this fast, gravity no longer affects you.
+@export var max_fall_speed : float = 35;
 ## how fast you throw the hook
 @export var throw_vel : float = 10.0
 ## how fast you pull yourself toward the hook
 @export var player_reel_speed : float = 3.0
 ## minimum dot product for the hook to attach
 @export var hook_attach_threshold : float = 0;
-##
+## how close you can reel yourself into the hook
 @export var min_reel_dist : float = 1;
-
+## how far you must be from the near side of the sphere you're placing 
+@export var placement_min_dist : float = 5;
+## radius of placement
+@export var placement_radius : float = 5;
 
 @export_group("Input Actions")
 ## Name of Input Action to move Left.
@@ -114,7 +121,10 @@ func _physics_process(delta: float) -> void:
 	# Apply gravity to velocity
 	if has_gravity:
 		if not is_on_floor():
-			velocity += get_gravity() * delta
+			if velocity.y > -max_fall_speed:
+				velocity += get_gravity() * delta;
+			else:
+				print("WOAH SO FAST")
 
 	# Apply jumping
 	if can_jump:
@@ -122,7 +132,7 @@ func _physics_process(delta: float) -> void:
 			velocity.y = jump_velocity
 
 	# Modify speed based on sprinting
-	if can_sprint and Input.is_action_pressed(input_sprint):
+	if (can_sprint or (can_freefly and freeflying)) and Input.is_action_pressed(input_sprint):
 			move_speed = sprint_speed
 	else:
 		move_speed = base_speed
@@ -155,53 +165,102 @@ func _physics_process(delta: float) -> void:
 	
 	if hookOut:
 		hook.gravity_scale = 1;
+		
+		hook.find_child("FogGlow").light_volumetric_fog_energy = 16;
+		
 	else:
 		hook.gravity_scale = 0;
 		hook.linear_velocity = Vector3(0,0,0);
 		
-		var distToReel : float = max($RopeConnect.global_position.distance_to(hook.position)*3, 30)
+		hook.find_child("FogGlow").light_volumetric_fog_energy = 2;
+		
+		
+		var distToHook : float = $RopeConnect.global_position.distance_to(hook.position)
+		
+		var minDistBeforeSnap : float = 0.1;
+		
+		var distToReelThisFrame : float = max(distToHook * 3, 100) * delta;
+		
+		if(distToHook < minDistBeforeSnap or distToReelThisFrame > distToHook):
+			distToReelThisFrame = distToHook
+		
 		var dirToRopeConnect : Vector3 = ($RopeConnect.global_position - hook.position).normalized();
-		hook.global_position += dirToRopeConnect * distToReel * delta;
+		hook.global_position += dirToRopeConnect * distToReelThisFrame;
+		
+	
 	
 	
 	# Dig
 	if Input.is_action_just_pressed("dig"):
 		
-		voxel_tool.mode = VoxelTool.MODE_REMOVE
-		
-		voxel_tool.do_sphere($"../Hook".global_position, 3.0)
-		print("DIGGING");
-	
+		if hookOut:
+			voxel_tool.mode = VoxelTool.MODE_REMOVE
+			
+			voxel_tool.do_sphere($"../Hook".global_position, 3.0)
+			print("DIGGING");
+			
+			hookNoLongerOut()
 	
 	# Place
 	if Input.is_action_just_pressed("place"):
 		
-		voxel_tool.mode = VoxelTool.MODE_ADD
-		
-		voxel_tool.do_sphere($"../Hook".global_position, 5.0)
-		print("PLACING");
+		if global_position.distance_to(hook.global_position) > placement_radius + placement_min_dist:
+			
+			voxel_tool.mode = VoxelTool.MODE_ADD
+			
+			voxel_tool.do_sphere($"../Hook".global_position, placement_radius)
+			print("PLACING");
+			
+			hookNoLongerOut()
 		
 	
+	#throw
 	if Input.is_action_just_pressed("throw"):
 		hookOut = true;
 		ropeLength = null;
 		hook.set("freeze", false);
 		
-		hook.position = $Head/Camera3D/ThrowStart.global_position;
+		hook.global_position = $Head/Camera3D/ThrowStart.global_position;
 		
 		var dir : Vector3 = hook.global_position - $Head/Camera3D.global_position;
 		var initVel : Vector3 = dir.normalized() * throw_vel;
 		
 		hook.linear_velocity = initVel + velocity;
 	
+	#release throw
 	if Input.is_action_just_released("throw"):
-		hookOut = false;
-		ropeLength = null;
-		hook.set("freeze", false);
+		hookNoLongerOut()
 	
 	
 	if Input.is_action_just_pressed("stall"):
 		velocity *= 0;
+		
+	#STEELPUSH
+	#if Input.is_action_pressed("thumb 2 input") and ropeLength:
+			#var dirToHook: Vector3 = (hook.global_position - $RopeConnect.global_position).normalized();
+			#velocity += -dirToHook * 0.3;
+			#ropeLength += 10;
+			
+	if Input.is_action_just_pressed("ember"):
+		#var ember = emberPrefab.instantiate()
+		var ember = load("res://ember.tscn").instantiate()
+		add_child(ember)
+		ember.reparent($"..")
+		
+		ember.global_position = $Head/Camera3D/ThrowStart.global_position;
+		var dir : Vector3 = ember.global_position - $Head/Camera3D.global_position;
+		var initVel : Vector3 = dir.normalized() * throw_vel;
+		
+		ember.linear_velocity = initVel + velocity;
+		
+		
+		
+
+func hookNoLongerOut() -> void:
+	hookOut = false;
+	ropeLength = null;
+	hook.set("freeze", false);
+
 
 
 func simRope(pos_before: Vector3, delta: float) -> void:
@@ -293,5 +352,5 @@ func check_input_mappings():
 
 func _on_hook_collided(dotProduct:float) -> void:
 	if not ropeLength and hookOut and dotProduct > hook_attach_threshold:
-		ropeLength = position.distance_to(hook.position);
+		ropeLength = position.distance_to(hook.position)+1000;
 		hook.set_deferred("freeze", true);

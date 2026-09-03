@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://bs72ogkvdd7d6"]
 
 [ext_resource type="Script" uid="uid://bnk1vl200yfhe" path="res://addons/proto_controller/proto_controller.gd" id="1_ucva2"]
+[ext_resource type="Texture2D" uid="uid://dc465yg5q1xdj" path="res://crosshair.png" id="2_wr06p"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_iof21"]
 albedo_color = Color(0.91806, 0.575202, 0.222449, 1)
@@ -41,5 +42,16 @@ fov = 100.0
 [node name="ThrowStart" type="Marker3D" parent="Head/Camera3D" unique_id=1840864622]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
 
-[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=2095371578]
-omni_range = 15.0
+[node name="TextureRect" type="TextureRect" parent="Head/Camera3D" unique_id=295653925]
+modulate = Color(1, 1, 1, 0.33333334)
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -5.0
+offset_top = -5.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("2_wr06p")
+expand_mode = 1
