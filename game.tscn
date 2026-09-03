@@ -1,9 +1,9 @@
 [gd_scene format=3 uid="uid://cttsre65ow4ub"]
 
-[ext_resource type="PackedScene" uid="uid://meqne88jijt7" path="res://soccer_ball.tscn" id="1_e2o6t"]
 [ext_resource type="PackedScene" uid="uid://bs72ogkvdd7d6" path="res://addons/proto_controller/proto_controller.tscn" id="2_e2o6t"]
 [ext_resource type="PackedScene" uid="uid://c2gsnlt3cs3km" path="res://hook.tscn" id="2_fc0e3"]
 [ext_resource type="Texture2D" uid="uid://cgmwhseciaffm" path="res://icon.svg" id="3_feb5d"]
+[ext_resource type="PackedScene" uid="uid://duskduaui3jqs" path="res://light_with_viewer.tscn" id="3_ryrav"]
 [ext_resource type="PackedScene" uid="uid://jctbq67dyh5n" path="res://piercing_flame.tscn" id="5_7jktm"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_80nbo"]
@@ -69,44 +69,39 @@ shadow_enabled = true
 use_collision = true
 
 [node name="CSGBox3D" type="CSGBox3D" parent="Home" unique_id=556478129]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10.5, 0.375)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0.375)
 use_collision = true
 size = Vector3(15.75, 1, 21)
 
 [node name="CSGBox3D5" type="CSGBox3D" parent="Home" unique_id=1455132077]
-transform = Transform3D(1, 0, 0, 0, 1.2, 0, 0, 0, 0.099999964, -2.5, 14.3, 11.024992)
+transform = Transform3D(1, 0, 0, 0, 1.2, 0, 0, 0, 0.099999964, -2.5, 2.8000002, 11.024992)
 use_collision = true
 size = Vector3(12.25, 7, 21.75)
 
 [node name="CSGBox3D4" type="CSGBox3D" parent="Home" unique_id=1440435150]
-transform = Transform3D(0.8660254, -0.5, 0, 0.5, 0.8660254, 0, 0, 0, 1, 15.38814, 9.680608, 7.75)
+transform = Transform3D(0.8660254, -0.5, 0, 0.5, 0.8660254, 0, 0, 0, 1, 10.132772, 0.3681078, 7.75)
 use_collision = true
-size = Vector3(15.75, 1, 11.25)
+size = Vector3(6.5, 1, 11.25)
 
-[node name="SoccerBall" parent="Home" unique_id=1707658285 instance=ExtResource("1_e2o6t")]
-transform = Transform3D(1, 0, 0, 0, 0.9659258, 0.25881904, 0, -0.25881904, 0.9659258, 8.25, 6, 7.75)
+[node name="LightWithViewer" parent="Home" unique_id=648910153 instance=ExtResource("3_ryrav")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.76, 0)
+light_color = Color(0.84000003, 0.94933337, 1, 1)
+light_energy = 0.1
+omni_range = 100.0
+omni_attenuation = 0.25
 
 [node name="Player" parent="." unique_id=592431773 node_paths=PackedStringArray("voxel_terrain") instance=ExtResource("2_e2o6t")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.25, 11.5, 2)
 voxel_terrain = NodePath("../VoxelTerrain")
 can_freefly = true
 base_speed = 5.0
-freefly_speed = 50.0
+freefly_speed = 100.0
 player_reel_speed = 5.0
 hook_attach_threshold = -0.5
 min_reel_dist = 2.0
 placement_min_dist = 1.0
 
-[node name="OmniLight3D2" type="OmniLight3D" parent="Player" unique_id=265657625]
+[node name="LightWithViewer" parent="Player" unique_id=1701502032 instance=ExtResource("3_ryrav")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
-light_energy = 0.2
-light_volumetric_fog_energy = 0.0
-omni_range = 60.0
-omni_attenuation = 0.7
-
-[node name="VoxelViewer" type="VoxelViewer" parent="Player/OmniLight3D2" unique_id=774183416]
-view_distance = 78
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.6999998, 0)
 
 [node name="VoxelTerrain" type="VoxelTerrain" parent="." unique_id=1590012963]
 collision_mask = 6
@@ -123,19 +118,7 @@ mesher = SubResource("VoxelMesherTransvoxel_7jktm")
 transform = Transform3D(1, 0, 0, 0, -1, 8.742278e-08, 0, -8.742278e-08, -1, 0, 70, 0)
 
 [node name="Hook" parent="." unique_id=2126826750 instance=ExtResource("2_fc0e3")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.25, 13, 6.5)
-
-[node name="Collectible Rect" type="CSGBox3D" parent="." unique_id=512349827]
-transform = Transform3D(1.0606601, 1.0606601, 0, -1.0606601, 1.0606601, 0, 0, 0, 1.5, 22.25, -19, 110.5)
-size = Vector3(16.5, 1, 1)
-
-[node name="Collectible Rect2" type="CSGBox3D" parent="." unique_id=184308838]
-transform = Transform3D(0.68301266, -0.70710677, -0.18301271, 0.68301266, 0.70710677, -0.18301271, 0.25881904, 0, 0.9659258, 16.19579, 44.87777, 99.95862)
-size = Vector3(16.5, 1, 1)
-
-[node name="Collectible Rect3" type="CSGBox3D" parent="." unique_id=1769922303]
-transform = Transform3D(-9.57572e-08, 0, -2.1906695, 1.0953348, 1.8971754, -4.78786e-08, 1.8971754, -1.0953348, -8.292817e-08, -41.918358, -1.8107729, 98.164185)
-size = Vector3(16.5, 1, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 
 [node name="PiercingFlame" parent="." unique_id=1878161707 instance=ExtResource("5_7jktm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 100, 1000)
@@ -192,6 +175,6 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 91.8
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -536.6389, -50, 856.33325)
 
 [node name="PiercingFlame18" parent="." unique_id=1145808062 instance=ExtResource("5_7jktm")]
-transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -11.138901, 10.5, -13.166626)
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -128.639, -50, -274.167)
 
 [connection signal="hookCollided" from="Hook" to="Player" method="_on_hook_collided"]

@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://nmra3cq4mj6v"]
 
 [ext_resource type="Script" uid="uid://dclm65puuk77h" path="res://ember.gd" id="1_bn4s7"]
+[ext_resource type="Script" uid="uid://dxx0tsboq6340" path="res://light_with_viewer.gd" id="2_2oh8c"]
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_ldsl7"]
 radius = 0.09798623
@@ -35,9 +36,10 @@ light_color = Color(1, 0.885, 0.7, 1)
 light_energy = 0.5
 omni_range = 75.0
 omni_attenuation = 0.5
+script = ExtResource("2_2oh8c")
 
 [node name="VoxelViewer" type="VoxelViewer" parent="MainLight" unique_id=663267427]
-view_distance = 90
+view_distance = 16
 requires_visuals = false
 requires_collisions = false
 

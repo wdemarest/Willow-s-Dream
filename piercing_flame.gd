@@ -13,10 +13,11 @@ func _process(delta: float) -> void:
 
 
 func _on_body_entered(body: Node3D) -> void:
-	$Body/Hollowness/InnerFlame.queue_free()
-	
-	$Light.omni_range /= 2;
-	$Light.light_energy /= 3
-	$Light.light_color = Color(0.98, 0.804, 0.735, 1.0) 
+	if $Body/Hollowness/InnerFlame:
+		$Body/Hollowness/InnerFlame.queue_free()
+		
+		$Light.omni_range /= 2;
+		$Light.light_energy /= 3
+		$Light.light_color = Color(0.98, 0.804, 0.735, 1.0) 
 	
 	

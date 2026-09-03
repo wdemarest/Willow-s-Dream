@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://jctbq67dyh5n"]
 
 [ext_resource type="Script" uid="uid://b4sh2wqhxu303" path="res://piercing_flame.gd" id="1_1druj"]
+[ext_resource type="Script" uid="uid://dxx0tsboq6340" path="res://light_with_viewer.gd" id="2_8gdkq"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_8gdkq"]
 
@@ -28,9 +29,10 @@ light_color = Color(0.98039216, 0.43137255, 0.21568628, 1)
 light_energy = 15.0
 omni_range = 60.0
 omni_attenuation = 0.5
+script = ExtResource("2_8gdkq")
 
 [node name="VoxelViewer" type="VoxelViewer" parent="Light" unique_id=819402437]
-view_distance = 60
+view_distance = 16
 requires_collisions = false
 enabled_in_editor = true
 

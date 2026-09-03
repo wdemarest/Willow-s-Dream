@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://c2gsnlt3cs3km"]
 
+[ext_resource type="Script" uid="uid://dxx0tsboq6340" path="res://light_with_viewer.gd" id="1_1mm2r"]
+
 [sub_resource type="GDScript" id="GDScript_ldsl7"]
 script/source = "extends RigidBody3D
 
@@ -70,9 +72,10 @@ light_color = Color(1, 0.945, 0.7, 1)
 light_energy = 1.5
 light_volumetric_fog_energy = 0.1
 omni_range = 50.0
+script = ExtResource("1_1mm2r")
 
 [node name="VoxelViewer" type="VoxelViewer" parent="OmniLight3D" unique_id=663267427]
-view_distance = 65
+view_distance = 16
 
 [node name="FogGlow" type="OmniLight3D" parent="." unique_id=942314801]
 light_color = Color(1, 0.7607843, 0, 1)

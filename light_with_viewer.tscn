@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://duskduaui3jqs"]
+
+[ext_resource type="Script" uid="uid://dxx0tsboq6340" path="res://light_with_viewer.gd" id="1_n1blf"]
+
+[node name="LightWithViewer" type="OmniLight3D" unique_id=648910153]
+light_energy = 0.2
+light_volumetric_fog_energy = 0.0
+omni_range = 60.0
+omni_attenuation = 0.7
+script = ExtResource("1_n1blf")
+
+[node name="VoxelViewer" type="VoxelViewer" parent="." unique_id=1626179511]
+view_distance = 16
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.6999998, 0)
